@@ -7,7 +7,7 @@ use super::Commit;
 pub fn handler(ctx: Context<Commit>) -> Result<()> {
     commit_and_undelegate_accounts(
         &ctx.accounts.initializer,
-        vec![ctx.accounts.counter.clone()],
+        vec![&ctx.accounts.counter.clone()],
         &ctx.accounts.magic_context,
         &ctx.accounts.magic_program,
     )?;

@@ -6,6 +6,7 @@ pub struct Commit<'info> {
     #[account(mut)]
     pub initializer: Signer<'info>,
 
+    /// CHECK: Counter account for ephemeral commit operations
     #[account(mut)]
     pub counter: AccountInfo<'info>,
 
@@ -18,7 +19,7 @@ pub struct Commit<'info> {
 pub fn handler(ctx: Context<Commit>) -> Result<()> {
     commit_accounts(
         &ctx.accounts.initializer,
-        vec![ctx.accounts.counter.clone()],
+        vec![&ctx.accounts.counter.clone()],
         &ctx.accounts.magic_context,
         &ctx.accounts.magic_program,
     )?;

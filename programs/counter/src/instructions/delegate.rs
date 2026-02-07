@@ -7,6 +7,7 @@ pub struct Delegate<'info> {
     #[account(mut)]
     pub initializer: Signer<'info>,
 
+    /// CHECK: Counter account validated by seeds constraint
     #[account(
         mut,
         seeds = [COUNTER_SEED, initializer.key().as_ref()],
@@ -38,14 +39,14 @@ pub fn handler(ctx: Context<Delegate>) -> Result<()> {
     ];
 
     let accounts = DelegateAccounts {
-        payer: ctx.accounts.initializer.to_account_info(),
-        pda: ctx.accounts.counter.to_account_info(),
-        owner_program: ctx.accounts.owner_program.to_account_info(),
-        buffer: ctx.accounts.delegation_buffer.to_account_info(),
-        delegation_record: ctx.accounts.delegation_record.to_account_info(),
-        delegation_metadata: ctx.accounts.delegation_metadata.to_account_info(),
-        delegation_program: ctx.accounts.delegation_program.to_account_info(),
-        system_program: ctx.accounts.system_program.to_account_info(),
+        payer: &ctx.accounts.initializer.to_account_info(),
+        pda: &ctx.accounts.counter.to_account_info(),
+        owner_program: &ctx.accounts.owner_program.to_account_info(),
+        buffer: &ctx.accounts.delegation_buffer.to_account_info(),
+        delegation_record: &ctx.accounts.delegation_record.to_account_info(),
+        delegation_metadata: &ctx.accounts.delegation_metadata.to_account_info(),
+        delegation_program: &ctx.accounts.delegation_program.to_account_info(),
+        system_program: &ctx.accounts.system_program.to_account_info(),
     };
 
     let config = DelegateConfig {
@@ -53,6 +54,6 @@ pub fn handler(ctx: Context<Delegate>) -> Result<()> {
         ..Default::default()
     };
 
-    delegate_account(accounts, &[seeds], config)?;
+    delegate_account(accounts, seeds, config)?;
     Ok(())
 }

@@ -14,7 +14,7 @@ pub fn handler(ctx: Context<IncreaseCounter>, increase_by: u64) -> Result<()> {
 
     commit_accounts(
         &ctx.accounts.initializer,
-        vec![counter.to_account_info()],
+        vec![&counter.to_account_info()],
         &ctx.accounts.magic_context,
         &ctx.accounts.magic_program,
     )?;

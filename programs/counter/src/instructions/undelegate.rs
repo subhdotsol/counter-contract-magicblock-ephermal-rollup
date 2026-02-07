@@ -3,6 +3,7 @@ use ephemeral_rollups_sdk::cpi::undelegate_account;
 
 #[derive(Accounts)]
 pub struct Undelegate<'info> {
+    /// CHECK: Counter account for undelegation - verified by delegation program
     #[account(mut)]
     pub counter: AccountInfo<'info>,
 

@@ -10,6 +10,8 @@ pub mod events;
 pub mod instructions;
 pub mod state;
 
+use instructions::*;
+
 declare_id!("2yzu2LNwt8rhbXespx1yRzMB88GNehigooLuZz21qK1V");
 
 #[program]
@@ -47,14 +49,14 @@ pub mod counter {
         ];
 
         let delegate_accounts = DelegateAccounts {
-            payer: ctx.accounts.initializer.to_account_info(),
-            pda: ctx.accounts.counter.to_account_info(),
-            owner_program: ctx.accounts.owner_program.to_account_info(),
-            buffer: ctx.accounts.delegation_buffer.to_account_info(),
-            delegation_record: ctx.accounts.delegation_record.to_account_info(),
-            delegation_metadata: ctx.accounts.delegation_metadata.to_account_info(),
-            delegation_program: ctx.accounts.delegation_program.to_account_info(),
-            system_program: ctx.accounts.system_program.to_account_info(),
+            payer: &ctx.accounts.initializer.to_account_info(),
+            pda: &ctx.accounts.counter.to_account_info(),
+            owner_program: &ctx.accounts.owner_program.to_account_info(),
+            buffer: &ctx.accounts.delegation_buffer.to_account_info(),
+            delegation_record: &ctx.accounts.delegation_record.to_account_info(),
+            delegation_metadata: &ctx.accounts.delegation_metadata.to_account_info(),
+            delegation_program: &ctx.accounts.delegation_program.to_account_info(),
+            system_program: &ctx.accounts.system_program.to_account_info(),
         };
 
         let config = DelegateConfig {
@@ -62,7 +64,7 @@ pub mod counter {
             ..Default::default()
         };
 
-        delegate_account(delegate_accounts, &[seeds], config)?;
+        delegate_account(delegate_accounts, seeds, config)?;
         Ok(())
     }
 
@@ -72,7 +74,7 @@ pub mod counter {
     pub fn commit(ctx: Context<Commit>) -> Result<()> {
         commit_accounts(
             &ctx.accounts.initializer,
-            vec![ctx.accounts.counter.to_account_info()],
+            vec![&ctx.accounts.counter.to_account_info()],
             &ctx.accounts.magic_context,
             &ctx.accounts.magic_program,
         )?;
@@ -85,7 +87,7 @@ pub mod counter {
     pub fn commit_and_undelegate(ctx: Context<Commit>) -> Result<()> {
         commit_and_undelegate_accounts(
             &ctx.accounts.initializer,
-            vec![ctx.accounts.counter.to_account_info()],
+            vec![&ctx.accounts.counter.to_account_info()],
             &ctx.accounts.magic_context,
             &ctx.accounts.magic_program,
         )?;
@@ -101,7 +103,7 @@ pub mod counter {
 
         commit_accounts(
             &ctx.accounts.initializer,
-            vec![ctx.accounts.counter.to_account_info()],
+            vec![&ctx.accounts.counter.to_account_info()],
             &ctx.accounts.magic_context,
             &ctx.accounts.magic_program,
         )?;
@@ -118,7 +120,7 @@ pub mod counter {
 
         commit_and_undelegate_accounts(
             &ctx.accounts.initializer,
-            vec![ctx.accounts.counter.to_account_info()],
+            vec![&ctx.accounts.counter.to_account_info()],
             &ctx.accounts.magic_context,
             &ctx.accounts.magic_program,
         )?;
